@@ -12,10 +12,12 @@ def check_win(board):
 
     return next(
         (
+            # Vertical win
             True
             for col in range(3)
             if board[0][col] == board[1][col] == board[2][col] != '.'
         ),
+        # Diagonal win
         True
         if board[0][0] == board[1][1] == board[2][2] != '.'
         else board[0][2] == board[1][1] == board[2][0] != '.',
@@ -46,8 +48,17 @@ while True:
 
     print_board(board)
     while not win:
-        p1_row, p1_col = input('Player 1 - Select row and column of your move (separated by a comma):').split(",", 1)
-        board[int(p1_row) - 1][int(p1_col) - 1] = "X"
+        try:
+            p1_row, p1_col = input('Player 1 - Select row and column of your move (separated by a comma):').split(",", 1)
+            p1_row = int(p1_row)
+            p1_col = int(p1_col)
+            if not (1 <= p1_row <= 3) or not (1 <= p1_col <= 3) or board[p1_row - 1][p1_col - 1] != '.':
+                raise ValueError
+        except ValueError:
+            print("Invalid move. Please try again.")
+            continue
+
+        board[p1_row - 1][p1_col - 1] = "X"
         print_board(board)
         if check_win(board):
             win = True
@@ -59,8 +70,17 @@ while True:
                 quit()
 
         if not win:
-            p2_row, p2_col = input('Player 2 - Select row and column of your move (separated by a comma):').split(",", 1)
-            board[int(p2_row) - 1][int(p2_col) - 1] = "O"
+            try:
+                p2_row, p2_col = input('Player 2 - Select row and column of your move (separated by a comma):').split(",", 1)
+                p2_row = int(p2_row)
+                p2_col = int(p2_col)
+                if not (1 <= p2_row <= 3) or not (1 <= p2_col <= 3) or board[p2_row - 1][p2_col - 1] != '.':
+                    raise ValueError
+            except ValueError:
+                print("Invalid move. Please try again.")
+                continue
+
+            board[p2_row - 1][p2_col - 1] = "O"
             print_board(board)
             if check_win(board):
                 win = True
